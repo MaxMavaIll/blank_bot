@@ -19,7 +19,7 @@ async def main():
     )
     logger.info("Starting bot")
 
-    config = load_config(".env")
+    config = load_config("config.toml")
     bot = Bot(token=config.tg_bot.token, parse_mode="HTML")
     dp = Dispatcher()
     dp['config'] = config

@@ -1,7 +1,7 @@
 
 from dataclasses import dataclass
 from typing import List
-from environs import Env
+import toml
 
 @dataclass
 class Tg_bot:
@@ -26,21 +26,20 @@ class Config:
     db: DBConfig
     misc: Miscellaneus
 
-def load_config(path: str = None):
-    env = Env()
-    env.read_env(path)
+def load_config(path_config: str = 'config.toml'):
+    config = toml.load(path_config)
 
     return Config(
         tg_bot=Tg_bot(
-            token=env.str("BOT_TOKEN"),
-            admin_ids=list(map(int, env.list("ADMINS"))),
-            user_redis=env.bool("USE_REDIS")
+            token=config["Bot_Token"],
+            admin_ids=config["Admins"],
+            user_redis=config["USE_REDIS"]
         ), 
         db=DBConfig(
-            host=env.str("DB_HOST"),
-            password=env.str("DB_PASS"),
-            user=env.str("DB_USER"),
-            database=env.str("DB_NAME")
+            host=config["db"]["DB_HOST"],
+            password=config["db"]["DB_PASS"],
+            user=config["db"]["DB_USER"],
+            database=config["db"]["DB_NAME"]
         ),
         misc=Miscellaneus()
     )
